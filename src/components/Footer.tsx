@@ -32,7 +32,6 @@ const Footer: React.FC = () => {
               <a href={"https://github.com/linnux-x/komari-linnux"} target="_blank">
                 Linnux
               </a>
-              <span> (based on nezha-BITJEBE)</span>
             </section>
           </div>
         </section>
