@@ -1,6 +1,6 @@
 # Komari Linnux 主题
 
-这是为 [Komari Monitor](https://github.com/komari-monitor/komari) 制作的 Linnux 定制主题，基于 [BITJEBE/nezha-BITJEBE](https://github.com/BITJEBE/nezha-BITJEBE) 二次开发。
+这是为 [Komari Monitor](https://github.com/komari-monitor/komari) 制作的 Linnux 定制主题。
 
 ![主题预览](preview.png)
 
@@ -36,6 +36,6 @@ npm run build
 
 ## 致谢与许可证
 
-本项目派生自 [BITJEBE/nezha-BITJEBE](https://github.com/BITJEBE/nezha-BITJEBE)，其上游为 [Akizon77/nezha-dash-v1](https://github.com/Akizon77/nezha-dash-v1)。Komari 监控后端由 [komari-monitor/komari](https://github.com/komari-monitor/komari) 提供。
+主题设计参考 [Akizon77/nezha-dash-v1](https://github.com/Akizon77/nezha-dash-v1)。Komari 监控后端由 [komari-monitor/komari](https://github.com/komari-monitor/komari) 提供。
 
 本仓库遵循 [Apache License 2.0](LICENSE) 许可证。
