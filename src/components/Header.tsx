@@ -293,7 +293,7 @@ function Overview() {
   }, [])
   return (
     <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
-      <p className="text-base font-semibold">👋 {t("overview")}</p>
+      <p className="text-base font-semibold">🌐 {t("overview")}</p>
       <div className="flex items-center gap-1.5">
         <p className="text-sm font-medium opacity-50">{t("whereTheTimeIs")}</p>
         <NumberFlowGroup>
