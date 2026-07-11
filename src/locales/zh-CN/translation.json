@@ -7,6 +7,18 @@
   "offline": "离线",
   "whereTheTimeIs": "当前时间",
   "refreshing": "刷新中",
+  "controls": {
+    "map": "切换全球地图",
+    "services": "切换服务监控",
+    "layout": "切换卡片布局",
+    "sort": "排序",
+    "sortBy": "排序依据",
+    "sortOrder": "排序顺序",
+    "chooseType": "选择排序方式",
+    "chooseOrder": "选择排序顺序",
+    "ascending": "升序",
+    "descending": "降序"
+  },
   "info": {
     "websocketConnecting": "WebSocket 连接中",
     "websocketConnected": "WebSocket 连接成功",

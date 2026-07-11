@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { lazy, Suspense } from "react"
 import ReactDOM from "react-dom/client"
 import { Toaster } from "sonner"
 
@@ -17,6 +17,12 @@ import "./i18n"
 import "./index.css"
 
 const queryClient = new QueryClient()
+const ReactQueryDevtools = import.meta.env.DEV
+  ? lazy(async () => {
+      const module = await import("@tanstack/react-query-devtools")
+      return { default: module.ReactQueryDevtools }
+    })
+  : null
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <RPC2Provider>
@@ -40,7 +46,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                       position="top-center"
                       className={"flex items-center justify-center"}
                     />
-                    <ReactQueryDevtools />
+                    {ReactQueryDevtools && (
+                      <Suspense fallback={null}>
+                        <ReactQueryDevtools />
+                      </Suspense>
+                    )}
                   </TooltipProvider>
                 </SortProvider>
               </StatusProvider>
