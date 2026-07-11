@@ -37,13 +37,15 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: `assets/[name].[hash].js`,
           assetFileNames: `assets/[name].[hash].[ext]`,
           manualChunks(id) {
-            if (id.includes("node_modules")) {
-              return id.toString().split("node_modules/")[1].split("/")[0].toString()
-            }
+            if (!id.includes("node_modules")) return
+
+            const moduleId = id.replace(/\\/g, "/")
+            if (moduleId.includes("/recharts/") || moduleId.includes("/d3-")) return "charts"
+            if (moduleId.includes("/framer-motion/") || moduleId.includes("/motion-dom/")) return "motion"
           },
         },
       },
-      chunkSizeWarningLimit: 1500,
+      chunkSizeWarningLimit: 1000,
     },
   }
 

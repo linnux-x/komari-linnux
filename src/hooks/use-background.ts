@@ -12,6 +12,7 @@ declare global {
 }
 
 const BACKGROUND_CHANGE_EVENT = "backgroundChange"
+const THEME_SETTINGS_LOADED_EVENT = "themeSettingsLoaded"
 
 export function useBackground() {
   const [backgroundImage, setBackgroundImage] = useState<string | undefined>(undefined)
@@ -35,19 +36,13 @@ export function useBackground() {
       }
     }
 
-    // 设置一个轮询来检查初始背景
-    const intervalId = setInterval(() => {
-      if (window.CustomBackgroundImage || sessionStorage.getItem("savedBackgroundImage")) {
-        checkInitialBackground()
-        clearInterval(intervalId)
-      }
-    }, 100)
-
+    checkInitialBackground()
     window.addEventListener(BACKGROUND_CHANGE_EVENT, handleBackgroundChange)
+    window.addEventListener(THEME_SETTINGS_LOADED_EVENT, checkInitialBackground)
 
     return () => {
       window.removeEventListener(BACKGROUND_CHANGE_EVENT, handleBackgroundChange)
-      clearInterval(intervalId)
+      window.removeEventListener(THEME_SETTINGS_LOADED_EVENT, checkInitialBackground)
     }
   }, [])
 

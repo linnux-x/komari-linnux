@@ -460,6 +460,7 @@ export const fetchSetting = async (): Promise<SettingResponse> => {
     for (const [key, value] of Object.entries(themeSettings)) {
       ;(window as unknown as Record<string, unknown>)[key] = value
     }
+    window.dispatchEvent(new Event("themeSettingsLoaded"))
   }
   let version = "unknown"
   if (!privateSite) {
