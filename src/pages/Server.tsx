@@ -1,5 +1,4 @@
 import AssetSummaryWidget from "@/components/AssetSummaryWidget"
-import GlobalMap from "@/components/GlobalMap"
 import GroupSwitch from "@/components/GroupSwitch"
 import ServerCard from "@/components/ServerCard"
 import ServerCardInline from "@/components/ServerCardInline"
@@ -20,8 +19,10 @@ import { NezhaWebsocketResponse } from "@/types/nezha-api"
 import { ServerGroup } from "@/types/nezha-api"
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChartBarSquareIcon, MapIcon, ViewColumnsIcon } from "@heroicons/react/20/solid"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect, useRef, useState } from "react"
+import { lazy, Suspense, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+
+const GlobalMap = lazy(() => import("@/components/GlobalMap"))
 
 export default function Servers() {
   const { t } = useTranslation()
@@ -246,6 +247,9 @@ export default function Servers() {
       <div className="flex mt-6 items-center justify-between gap-2 server-overview-controls">
         <section className="flex items-center gap-2 w-full overflow-hidden">
           <button
+            type="button"
+            title={t("controls.map")}
+            aria-label={t("controls.map")}
             onClick={() => {
               setShowMap(showMap === "0" ? "1" : "0")
               localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
@@ -268,6 +272,9 @@ export default function Servers() {
             />
           </button>
           <button
+            type="button"
+            title={t("controls.services")}
+            aria-label={t("controls.services")}
             onClick={() => {
               setShowServices(showServices === "0" ? "1" : "0")
               localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
@@ -290,6 +297,9 @@ export default function Servers() {
             />
           </button>
           <button
+            type="button"
+            title={t("controls.layout")}
+            aria-label={t("controls.layout")}
             onClick={() => {
               setInline(inline === "0" ? "1" : "0")
               localStorage.setItem("inline", inline === "0" ? "1" : "0")
@@ -316,6 +326,9 @@ export default function Servers() {
         <Popover onOpenChange={setSettingsOpen}>
           <PopoverTrigger asChild>
             <button
+              type="button"
+              title={t("controls.sort")}
+              aria-label={t("controls.sort")}
               className={cn(
                 "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-white  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                 {
@@ -326,7 +339,7 @@ export default function Servers() {
                 },
               )}
             >
-              <p className="text-[10px] font-bold whitespace-nowrap">{sortType === "default" ? "Sort" : sortType.toUpperCase()}</p>
+              <p className="text-[10px] font-bold whitespace-nowrap">{sortType === "default" ? t("controls.sort") : sortType.toUpperCase()}</p>
               {sortOrder === "asc" && sortType !== "default" ? (
                 <ArrowUpIcon className="size-[13px]" />
               ) : sortOrder === "desc" && sortType !== "default" ? (
@@ -339,10 +352,10 @@ export default function Servers() {
           <PopoverContent className="p-4 w-[240px] rounded-lg">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs font-medium text-muted-foreground">Sort by</Label>
+                <Label className="text-xs font-medium text-muted-foreground">{t("controls.sortBy")}</Label>
                 <Select value={sortType} onValueChange={setSortType}>
                   <SelectTrigger className="w-full text-xs h-8">
-                    <SelectValue placeholder="Choose type" />
+                    <SelectValue placeholder={t("controls.chooseType")} />
                   </SelectTrigger>
                   <SelectContent>
                     {SORT_TYPES.map((type) => (
@@ -354,15 +367,15 @@ export default function Servers() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-xs font-medium text-muted-foreground">Sort order</Label>
+                <Label className="text-xs font-medium text-muted-foreground">{t("controls.sortOrder")}</Label>
                 <Select value={sortOrder} onValueChange={setSortOrder} disabled={sortType === "default"}>
                   <SelectTrigger className="w-full text-xs h-8">
-                    <SelectValue placeholder="Choose order" />
+                    <SelectValue placeholder={t("controls.chooseOrder")} />
                   </SelectTrigger>
                   <SelectContent>
                     {SORT_ORDERS.map((order) => (
                       <SelectItem key={order} value={order} className="text-xs">
-                        {order.charAt(0).toUpperCase() + order.slice(1)}
+                        {order === "asc" ? t("controls.ascending") : t("controls.descending")}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -372,7 +385,17 @@ export default function Servers() {
           </PopoverContent>
         </Popover>
       </div>
-      {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
+      {showMap === "1" && (
+        <Suspense
+          fallback={
+            <div className="flex min-h-48 items-center justify-center">
+              <Loader visible={true} />
+            </div>
+          }
+        >
+          <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />
+        </Suspense>
+      )}
       {showServices === "1" && <ServiceTracker serverList={filteredServers} />}
       {inline === "1" && (
         <section ref={containerRef} className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6 server-inline-list">

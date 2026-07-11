@@ -7,6 +7,18 @@
   "offline": "Offline",
   "whereTheTimeIs": "Where the time is",
   "refreshing": "Refreshing",
+  "controls": {
+    "map": "Toggle global map",
+    "services": "Toggle service monitoring",
+    "layout": "Toggle card layout",
+    "sort": "Sort",
+    "sortBy": "Sort by",
+    "sortOrder": "Sort order",
+    "chooseType": "Choose type",
+    "chooseOrder": "Choose order",
+    "ascending": "Ascending",
+    "descending": "Descending"
+  },
   "info": {
     "websocketConnecting": "WebSocket connecting",
     "websocketConnected": "WebSocket connected",
