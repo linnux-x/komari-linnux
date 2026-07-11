@@ -32,7 +32,7 @@
                 "name": "站点Logo",
                 "type": "input",
                 "default": "/favicon.ico",
-                "help": "站点Logo图片URL，显示在左上角和浏览器标签页。"
+                "help": "站点Logo图片URL，显示在页面左上角。浏览器标签页图标请使用 Komari 的 Favicon 设置。"
             },
             {
                 "key": "CustomIllustration",

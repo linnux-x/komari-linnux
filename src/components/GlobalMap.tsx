@@ -8,6 +8,19 @@ import { useTranslation } from "react-i18next"
 
 import MapTooltip from "./MapTooltip"
 
+type MapFeature = {
+  type: "Feature"
+  properties: {
+    iso_a2_eh: string
+    iso_a3_eh: string
+    [key: string]: string
+  }
+  geometry: never
+}
+
+const parsedGeoJson = JSON.parse(geoJsonString) as { features: MapFeature[] }
+const filteredMapFeatures = parsedGeoJson.features.filter((feature) => feature.properties.iso_a3_eh !== "")
+
 export default function GlobalMap({ serverList, now }: { serverList: NezhaServer[]; now: number }) {
   const { t } = useTranslation()
   const countryList: string[] = []
@@ -28,9 +41,6 @@ export default function GlobalMap({ serverList, now }: { serverList: NezhaServer
   const width = 900
   const height = 500
 
-  const geoJson = JSON.parse(geoJsonString)
-  const filteredFeatures = geoJson.features.filter((feature: { properties: { iso_a3_eh: string } }) => feature.properties.iso_a3_eh !== "")
-
   return (
     <section
       className={cn("flex flex-col gap-4 mt-8", {
@@ -46,7 +56,7 @@ export default function GlobalMap({ serverList, now }: { serverList: NezhaServer
           serverCounts={serverCounts}
           width={width}
           height={height}
-          filteredFeatures={filteredFeatures}
+          filteredFeatures={filteredMapFeatures}
           nezhaServerList={serverList}
           now={now}
         />
@@ -60,14 +70,7 @@ interface InteractiveMapProps {
   serverCounts: { [key: string]: number }
   width: number
   height: number
-  filteredFeatures: {
-    type: "Feature"
-    properties: {
-      iso_a2_eh: string
-      [key: string]: string
-    }
-    geometry: never
-  }[]
+  filteredFeatures: MapFeature[]
   nezhaServerList: NezhaServer[]
   now: number
 }

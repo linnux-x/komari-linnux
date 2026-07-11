@@ -1,4 +1,5 @@
 .env.development
+.cert/
 # Logs
 logs
 *.log

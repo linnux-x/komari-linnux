@@ -44,17 +44,6 @@ function Header() {
 
   const customMobileBackgroundImage = window.CustomMobileBackgroundImage !== "" ? window.CustomMobileBackgroundImage : undefined
 
-  useEffect(() => {
-    const link = document.querySelector("link[rel*='icon']") || document.createElement("link")
-    // @ts-expect-error set link.type
-    link.type = "image/x-icon"
-    // @ts-expect-error set link.rel
-    link.rel = "shortcut icon"
-    // @ts-expect-error set link.href
-    link.href = customLogo
-    document.getElementsByTagName("head")[0].appendChild(link)
-  }, [customLogo])
-
   // useEffect(() => {
   //   document.title = siteName || "哪吒监控 Nezha Monitoring"
   // }, [siteName])
@@ -78,18 +67,20 @@ function Header() {
   return (
     <div className="mx-auto w-full max-w-5xl">
       <section className="flex items-center justify-between header-top">
-        <section
+        <button
+          type="button"
           onClick={() => {
             sessionStorage.removeItem("selectedGroup")
             navigate("/")
           }}
-          className="cursor-pointer flex items-center sm:text-base text-sm font-medium"
+          className="cursor-pointer flex items-center border-0 bg-transparent p-0 text-left sm:text-base text-sm font-medium"
+          aria-label={siteName ? `${siteName} home` : "Linnux home"}
         >
           <div className="mr-1 flex flex-row items-center justify-start header-logo">
             <img
               width={40}
               height={40}
-              alt="apple-touch-icon"
+              alt={siteName ? `${siteName} logo` : "Linnux logo"}
               src={customLogo}
               className="relative m-0! border-2 border-transparent h-6 w-6 object-cover object-top p-0!"
             />
@@ -97,7 +88,7 @@ function Header() {
           {isLoading ? <Skeleton className="h-6 w-20 rounded-[5px] bg-muted-foreground/10 animate-none" /> : siteName || "LINNUX"}
           <Separator orientation="vertical" className="mx-2 hidden h-4 w-[1px] md:block" />
           <p className="hidden text-sm font-medium opacity-40 md:block">{customDesc}</p>
-        </section>
+        </button>
         <section className="flex items-center gap-2 header-handles">
           <div className="hidden sm:flex items-center gap-2">
             <Links />
@@ -111,6 +102,8 @@ function Header() {
               variant="outline"
               size="sm"
               onClick={handleBackgroundToggle}
+              title="切换背景图"
+              aria-label="切换背景图"
               className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
                 "bg-white/70 dark:bg-black/70": customBackgroundImage,
                 "hidden sm:block": customMobileBackgroundImage,
@@ -119,7 +112,7 @@ function Header() {
               <ImageMinus className="w-4 h-4" />
             </Button>
           )}
-          <a href="/admin" target="_blank">
+          <a href="/admin" target="_blank" rel="noopener noreferrer">
             <Button
               variant="outline"
               size="sm"
@@ -158,9 +151,9 @@ function Links() {
   // @ts-expect-error CustomLinks is a global variable
   const customLinks = window.CustomLinks as string
 
-  const links: links[] | null = customLinks ? JSON.parse(customLinks) : null
+  const links = parseCustomLinks(customLinks)
 
-  if (!links) return null
+  if (links.length === 0) return null
 
   return (
     <div className="flex items-center gap-2 w-fit">
@@ -181,22 +174,47 @@ function Links() {
   )
 }
 
+function parseCustomLinks(value: string): links[] {
+  if (!value) return []
+
+  try {
+    const parsed = JSON.parse(value)
+    if (!Array.isArray(parsed)) return []
+
+    return parsed.filter((item): item is links => {
+      if (!item || typeof item.link !== "string" || typeof item.name !== "string") return false
+
+      try {
+        const url = new URL(item.link, window.location.origin)
+        return url.protocol === "http:" || url.protocol === "https:"
+      } catch {
+        return false
+      }
+    })
+  } catch (error) {
+    console.warn("CustomLinks 配置不是有效的 JSON:", error)
+    return []
+  }
+}
+
 export function RefreshToast() {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
   const { needReconnect } = useWebSocketContext()
 
-  if (!needReconnect) {
-    return null
-  }
+  useEffect(() => {
+    if (!needReconnect) return
 
-  if (needReconnect) {
     sessionStorage.removeItem("needRefresh")
-    setTimeout(() => {
+    const timeout = window.setTimeout(() => {
       navigate(0)
     }, 1000)
-  }
+
+    return () => window.clearTimeout(timeout)
+  }, [needReconnect, navigate])
+
+  if (!needReconnect) return null
 
   return (
     <AnimatePresence>

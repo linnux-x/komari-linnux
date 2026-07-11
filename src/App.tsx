@@ -53,6 +53,23 @@ const MainApp: React.FC = () => {
     }
   }, [forceTheme])
 
+  useEffect(() => {
+    const language = settingData?.data?.config?.language
+    if (language && !localStorage.getItem("language")) {
+      void i18n.changeLanguage(language)
+    }
+  }, [i18n, settingData?.data?.config?.language])
+
+  useEffect(() => {
+    const siteName = settingData?.data?.config?.site_name
+    const siteDescription = settingData?.data?.config?.site_desc
+
+    if (siteName) document.title = siteName
+    if (siteDescription) {
+      document.querySelector('meta[name="description"]')?.setAttribute("content", siteDescription)
+    }
+  }, [settingData?.data?.config?.site_desc, settingData?.data?.config?.site_name])
+
   if (error) {
     return <ErrorPage code={500} message={error.message} />
   }
@@ -63,10 +80,6 @@ const MainApp: React.FC = () => {
 
   if (settingData?.data?.config?.custom_code && !isCustomCodeInjected) {
     return null
-  }
-
-  if (settingData?.data?.config?.language && !localStorage.getItem("language")) {
-    i18n.changeLanguage(settingData?.data?.config?.language)
   }
 
   if (settingData.data.private_site) {
