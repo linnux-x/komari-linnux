@@ -1,5 +1,30 @@
 # 更新日志
 
+> 版本说明：`v1.1.5` 及更早的条目来自上游 [nezha-BITJEBE](https://github.com/Akizon77/nezha-dash-v1) 主题的版本线。本仓库自 `v1.2.0` 起使用独立版本号，记录 fork 自身的改动。
+
+## v1.2.0
+
+本仓库首个独立版本。此前 `package.json` 与 `komari-theme.json` 沿用上游 `1.1.5`，但 fork 已在其上累计改动 33 个文件（+1880/−2616），同号不同物容易造成误解，故另起版本线。
+
+### 品牌与本地化
+
+- 主题更名为 `komari-linnux`，移除页脚的 `(based on nezha-BITJEBE)` 署名与其余上游品牌痕迹（致谢保留在 README）。
+- README 全面中文化。
+- 概览图标由波浪改为地球 emoji。
+
+### 安全与工程
+
+- 全部 GitHub Actions 按 commit SHA 固定，workflow 权限最小化。
+- 新增 `npm run test:security`：依赖审计脚本 + `node --test` 测试，CI 每次运行。当前仅保留一条有文档记录的例外（React Router RSC 模式 CSRF，本主题不使用 RSC 模式）。
+- 新增 `Validate Theme` CI：lint、安全审计与构建三道关卡。
+
+### 清理与文档
+
+- 移除 `bun.lock`：停在上游导入日从未更新，而 CI 只用 npm，两个锁文件并存会让人无法判断哪个权威。
+- 移除 `changelogithub.config.json`：`package.json` 中既无该依赖也无对应 script 的孤立配置。
+- 新增 `engines` 声明（node >= 22、npm >= 10），与 CI 的 setup-node 一致。
+- README 修正安装指引：此前指向当时并不存在的 Releases 页面；并新增「开发说明」，讲明源码中的 `Nezha` 命名是有意保留的适配层（`komariToNezhaWebsocketResponse` 负责 Komari → Nezha 数据形状转换），不应被当作历史遗留单独重命名。
+
 ## v1.1.4
 
 ### 修复
