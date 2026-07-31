@@ -13,13 +13,7 @@
 
 ## 安装方法
 
-### 通过 Komari 面板安装
-
-1. 从本仓库的 Releases 页面下载主题压缩包。
-2. 打开 Komari 管理面板，进入“主题管理”。
-3. 上传压缩包并启用 `komari-linnux` 主题。
-
-### 从源代码构建
+### 从源代码构建（当前推荐）
 
 ```bash
 git clone https://github.com/linnux-x/komari-linnux.git
@@ -28,7 +22,13 @@ npm ci
 npm run build
 ```
 
-构建完成后，将生成的 `dist/` 目录和根目录的 `komari-theme.json` 一同压缩为 ZIP 文件，再上传到 Komari。
+构建完成后，将生成的 `dist/` 目录和根目录的 `komari-theme.json` 一同压缩为 ZIP 文件，在 Komari 管理面板的“主题管理”中上传并启用 `komari-linnux` 主题。
+
+> 本仓库目前没有发布 Release。`.github/workflows/release.yml` 会在发布 Release 时自动打包主题，一旦发布首个 Release，即可改为直接下载压缩包安装。
+
+## 开发说明
+
+源码中大量出现 `Nezha` 命名（`NezhaServer`、`nezha-api`、`formatNezhaInfo` 等），这是**有意保留的适配层**，不是待清理的历史遗留：本主题的界面派生自 Nezha 主题，`komariToNezhaWebsocketResponse` 负责把 Komari 后端的数据转换成 Nezha 的数据形状，上层组件据此渲染。重命名这些标识符需要连同转换层一起重构，不要单独改名。
 
 ## 配置说明
 
