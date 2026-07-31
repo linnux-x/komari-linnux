@@ -13,7 +13,15 @@
 
 ## 安装方法
 
-### 从源代码构建（当前推荐）
+### 下载安装包（推荐）
+
+1. 从 [Releases](https://github.com/linnux-x/komari-linnux/releases/latest) 下载 `komari-linnux-<版本>.zip`。
+2. 打开 Komari 管理面板，进入“主题管理”。
+3. 上传压缩包并启用 `komari-linnux` 主题。
+
+安装包由 `.github/workflows/release.yml` 在发布 Release 时自动构建，内含 `dist/`、`komari-theme.json` 和 `preview.png`。
+
+### 从源代码构建
 
 ```bash
 git clone https://github.com/linnux-x/komari-linnux.git
@@ -22,9 +30,7 @@ npm ci
 npm run build
 ```
 
-构建完成后，将生成的 `dist/` 目录和根目录的 `komari-theme.json` 一同压缩为 ZIP 文件，在 Komari 管理面板的“主题管理”中上传并启用 `komari-linnux` 主题。
-
-> 本仓库目前没有发布 Release。`.github/workflows/release.yml` 会在发布 Release 时自动打包主题，一旦发布首个 Release，即可改为直接下载压缩包安装。
+构建完成后，将生成的 `dist/` 目录和根目录的 `komari-theme.json` 一同压缩为 ZIP 文件，按上面第 2、3 步上传。
 
 ## 开发说明
 
