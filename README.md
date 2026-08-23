@@ -36,6 +36,12 @@ npm run build
 
 源码中大量出现 `Nezha` 命名（`NezhaServer`、`nezha-api`、`formatNezhaInfo` 等），这是**有意保留的适配层**，不是待清理的历史遗留：本主题的界面派生自 Nezha 主题，`komariToNezhaWebsocketResponse` 负责把 Komari 后端的数据转换成 Nezha 的数据形状，上层组件据此渲染。重命名这些标识符需要连同转换层一起重构，不要单独改名。
 
+### 工具链兼容基线
+
+本主题当前固定在 Node.js 22、Vite 6、Tailwind CSS 3.4 和 TypeScript 5.x 的兼容主版本线，并持续更新这些版本线内的安全与维护补丁。Tailwind 4 与 Vite 8 将最低浏览器基线提高到 Safari 16.4、Chrome 111 和 Firefox 128；在 Komari 面板及目标 WebView 完成视觉、暗色模式、响应式布局和旧浏览器验收前，不把它们作为普通依赖更新混入安全修复。
+
+npm 12 会默认阻止未明确授权的依赖安装脚本。`package.json` 的 `allowScripts` 只允许锁文件中构建所需的 `@swc/core`、`esbuild` 与 macOS 可选的 `fsevents` 版本；升级这些包时必须同步复核并更新精确版本，不使用通配授权。
+
 ## 配置说明
 
 在 Komari 的主题管理中可设置站点 Logo、桌面端与移动端背景图、强制主题、顶部链接和卡片显示选项。站点名称和描述优先使用 Komari 后端的站点设置。
